@@ -1,4 +1,4 @@
-package .
+package knife4gf
 
 import "github.com/gogf/gf/v2/os/gres"
 
