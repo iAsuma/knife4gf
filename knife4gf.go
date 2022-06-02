@@ -1,13 +1,10 @@
 package knife4gf
 
 import (
-	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
-	"github.com/gogf/gf/v2/os/gcache"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/util/gconv"
-	"net/http"
 	"time"
 )
 
@@ -86,30 +83,6 @@ func (kf *Knife4gf) Install(s *ghttp.Server) error {
 
 	// The swagger resource files are served as static file service.
 	s.AddStaticPath(kdocPath, "resource/swagger")
-	// It here uses HOOK feature handling basic auth authentication and swagger.json modification.
-	s.Group("/swagger", func(group *ghttp.RouterGroup) {
-		group.Hook("/*", ghttp.HookBeforeServe, func(r *ghttp.Request) {
-			if kf.BasicAuthUser != "" {
-				// Authentication security checks.
-				var (
-					authCacheKey = fmt.Sprintf(`swagger_auth_failed_%s`, r.GetClientIp())
-					authCount    = gcache.MustGet(ctx, authCacheKey).Int()
-				)
-				if authCount > MaxAuthAttempts {
-					r.Response.WriteStatus(
-						http.StatusForbidden,
-						"max authentication count exceeds, please try again in one minute!",
-					)
-					r.ExitAll()
-				}
-				// Basic authentication.
-				if !r.BasicAuth(kf.BasicAuthUser, kf.BasicAuthPass) {
-					_ = gcache.Set(ctx, authCacheKey, authCount+1, AuthFailedInterval)
-					r.ExitAll()
-				}
-			}
-		})
-	})
 	return nil
 }
 
