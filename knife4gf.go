@@ -87,10 +87,24 @@ func (kf *Knife4gf) Install(s *ghttp.Server) error {
 
 	// The swagger resource files are served as static file service.
 	s.AddStaticPath(kdocPath, "resource/swagger")
-	s.BindHookHandler(kdocPath+"/service", ghttp.HookBeforeServe, func(r *ghttp.Request) {
+	s.BindHandler(kdocPath+"/services", func(r *ghttp.Request) {
+		var (
+			err error
+		)
+
 		content := service.ApiServices(s)
-		r.Response.WriteExit(content)
+		err = r.Response.WriteJsonExit(content)
+		if err != nil {
+			s.Logger().Error(ctx, err)
+		}
 	})
+	s.Logger().Infof(
+		ctx,
+		`knife4gf ui is serving at address: %s:%s%s`,
+		"127.0.0.1",
+		s.GetListenedPort(),
+		kdocPath+"services",
+	)
 	return nil
 }
 
