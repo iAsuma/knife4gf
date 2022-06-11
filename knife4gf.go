@@ -5,6 +5,7 @@ import (
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/util/gconv"
+	"github.com/iasuma/knife4gf/internal/service"
 	"github.com/iasuma/knife4gf/packed"
 	"time"
 )
@@ -86,7 +87,10 @@ func (kf *Knife4gf) Install(s *ghttp.Server) error {
 
 	// The swagger resource files are served as static file service.
 	s.AddStaticPath(kdocPath, "resource/swagger")
-	//s.SetRewrite(kdocPath, kdocPath+"index.html")
+	s.BindHookHandler(kdocPath+"/service", ghttp.HookBeforeServe, func(r *ghttp.Request) {
+		content := service.ApiServices(s)
+		r.Response.WriteExit(content)
+	})
 	return nil
 }
 
