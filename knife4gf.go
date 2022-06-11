@@ -5,6 +5,7 @@ import (
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/util/gconv"
+	"github.com/iasuma/knife4gf/packed"
 	"time"
 )
 
@@ -67,6 +68,8 @@ func (kf *Knife4gf) Install(s *ghttp.Server) error {
 		//oai = s.GetOpenApi()
 	)
 
+	packed.Init()
+
 	// Retrieve the configuration map and assign it to swagger object.
 	m := g.Cfg().MustGet(ctx, "swagger").Map()
 	if m != nil {
@@ -83,7 +86,7 @@ func (kf *Knife4gf) Install(s *ghttp.Server) error {
 
 	// The swagger resource files are served as static file service.
 	s.AddStaticPath(kdocPath, "resource/swagger")
-	s.SetRewrite(kdocPath, kdocPath+"index.html")
+	//s.SetRewrite(kdocPath, kdocPath+"index.html")
 	return nil
 }
 
