@@ -8,8 +8,7 @@ import (
 const (
 	apiDocName           = `{ApiDocName}`
 	apiDocURL            = `{ApiDocURL}`
-	servicesJsonTemplate = `
-[
+	servicesJsonTemplate = `[
     {
         "name": "{ApiDocName}",
         "url": "{ApiDocURL}",

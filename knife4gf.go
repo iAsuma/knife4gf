@@ -87,6 +87,7 @@ func (kf *Knife4gf) Install(s *ghttp.Server) error {
 
 	// The swagger resource files are served as static file service.
 	s.AddStaticPath(kdocPath, "resource/swagger")
+	s.SetRewrite(kdocPath+"/api.json", "/api.json")
 	s.BindHandler(kdocPath+"/services", func(r *ghttp.Request) {
 		var (
 			err error
