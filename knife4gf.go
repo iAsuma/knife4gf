@@ -104,7 +104,7 @@ func (kf *Knife4gf) Install(s *ghttp.Server) error {
 	})
 	s.Logger().Infof(
 		ctx,
-		`knife4gf ui is serving at address: %s:%s/`,
+		`knife4gf ui is serving at address: %s%s/`,
 		kf.getListenAddress(ctx),
 		kdocPath,
 	)
