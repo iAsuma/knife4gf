@@ -1,8 +1,6 @@
 # knife4gf
 knife4gf is swagger ui for GoFrame V2, it based on knife4j.
 
-> 特色：加载`nacos`配置
-
 ### 使用
 1. 安装`knife4gf`
 ```
