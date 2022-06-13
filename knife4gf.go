@@ -1,9 +1,12 @@
 package knife4gf
 
 import (
+	"context"
+	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/iasuma/knife4gf/internal/service"
 	"github.com/iasuma/knife4gf/packed"
@@ -101,9 +104,8 @@ func (kf *Knife4gf) Install(s *ghttp.Server) error {
 	})
 	s.Logger().Infof(
 		ctx,
-		`knife4gf ui is serving at address: http://%s:%d%s/`,
-		"127.0.0.1",
-		s.GetListenedPort(),
+		`knife4gf ui is serving at address: %s:%s/`,
+		kf.getListenAddress(ctx),
 		kdocPath,
 	)
 	return nil
@@ -112,4 +114,19 @@ func (kf *Knife4gf) Install(s *ghttp.Server) error {
 // Remove uninstalls swagger feature from server.
 func (kf Knife4gf) Remove() error {
 	return nil
+}
+
+func (kf *Knife4gf) getListenAddress(ctx context.Context) string {
+	var (
+		array = gstr.SplitAndTrim(g.Cfg().MustGet(ctx, "server.address").String(), ":")
+		host  = `127.0.0.1`
+		port  = 0
+	)
+	if len(array) > 1 {
+		host = array[0]
+		port = gconv.Int(array[1])
+	} else {
+		port = gconv.Int(array[0])
+	}
+	return fmt.Sprintf(`http://%s:%d`, host, port)
 }
